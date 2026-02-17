@@ -59,39 +59,76 @@
 
         @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* --- GRILLE DES UE --- */
+        /* --- GRILLE DES UE (VERSION ROBUSTE) --- */
         .ue-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 2rem;
+            /* Cartes un peu plus larges (240px) pour éviter que le texte ne soit trop serré */
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            /* Un grand écart (40px) pour que l'effet de survol ne touche pas les voisins */
+            gap: 40px; 
+            padding: 20px 10px; /* Un peu de marge autour de la grille */
+            align-items: stretch; /* Force toutes les cartes d'une ligne à avoir la même hauteur */
         }
 
         .ue-card {
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             border: 2px solid transparent;
+            
+            /* FLEXBOX : C'est le secret pour l'alignement */
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100%;
+            justify-content: space-between; /* Pousse l'icône en haut et le texte en bas */
+            height: 100%; /* Remplit toute la hauteur de la case de la grille */
+            
+            /* Sécurité : Hauteur minimale pour que même les cartes vides soient jolies */
+            min-height: 220px; 
+            position: relative;
+            z-index: 1;
         }
 
         .ue-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px); /* L'effet "pop" vers le haut */
             border-color: var(--primary);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); /* Une ombre plus douce mais plus grande */
+            z-index: 10; /* Fait passer la carte DEVANT les autres si jamais elles se touchent */
         }
 
-        .ue-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
-        .ue-code { font-weight: bold; color: var(--primary); font-size: 1.2rem; margin-bottom: 0.5rem;}
-        .ue-name { font-size: 0.95rem; line-height: 1.4; }
+        .ue-icon { 
+            font-size: 3.5rem; 
+            margin-bottom: 0.5rem; 
+            display: block;
+            /* Petite astuce pour centrer l'icône verticalement dans la partie haute */
+            flex-grow: 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ue-code { 
+            font-weight: bold; 
+            color: var(--primary); 
+            font-size: 1.1rem; 
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ue-name { 
+            font-size: 0.95rem; 
+            line-height: 1.4; 
+            color: #4a5568;
+            /* Fixe une hauteur pour le texte (3 lignes max) pour éviter les sauts */
+            min-height: 4.2em; 
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
 
         /* --- LISTE DE TÉLÉCHARGEMENT --- */
         .download-list {
@@ -214,7 +251,14 @@
                 { id: "UE024", name: "UE 024 (Nom à définir)", icon: "📁" },
             ],
             "vet2": [
-                { id: "UE031", name: "Pathologie Générale", icon: "🦠" }
+                { id: "UE031", name: "Pathologie Générale", icon: "🦠" }, // <--- Virgule ajoutée
+                { id: "UE032", name: "Pharmacologie", icon: "💊" },      // <--- Virgule ajoutée
+                { id: "UE033", name: "Toxicologie", icon: "☠️" },        // <--- Virgule ajoutée
+                { id: "UE034", name: "Parasitologie", icon: "🪱" },      // <--- Virgule ajoutée
+                { id: "UE035", name: "Maladies Infectieuses", icon: "🧫" }, // <--- Virgule ajoutée
+                { id: "UE036", name: "Physiologie", icon: "❤️" },        // <--- Virgule ajoutée
+                { id: "UE037", name: "Chirurgie", icon: "🔪" },          // <--- Virgule ajoutée
+                { id: "UE038", name: "Imagerie", icon: "📷" }            // Pas de virgule obligatoire à la fin
             ]
         };
 
@@ -239,7 +283,10 @@
                 { name: "Ostéologie membre thoracique", desc: "Complet", file: "fichiers/ue012_osteo.apkg" }
             ],
 
-            // Tu peux ajouter UE022, UE023 ici...
+           "UE036": [
+                { name: "Physiologie", desc: "Complet", file: "fichiers/ue036.apkg" }
+            ],
+ // Tu peux ajouter UE022, UE023 ici...
         };
 
         // --- LOGIQUE DU SITE ---
